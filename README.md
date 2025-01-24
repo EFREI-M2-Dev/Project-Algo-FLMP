@@ -30,7 +30,7 @@ pip install -r requirements.txt
 
 Pour exécuter l'application FastAPI, utilisez la commande suivante :  
 ```sh
-fastapi dev app/main.py
+python -m app.main
 ```
 
 L'application sera disponible à l'adresse que FastAPI affichera dans la console (par défaut sur [http://127.0.0.1:8000](http://127.0.0.1:8000)).
