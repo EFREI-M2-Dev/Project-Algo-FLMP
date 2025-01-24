@@ -1,6 +1,9 @@
-from fastapi import FastAPI
-from app.controllers.tweet_controller import router as tweet_router
+from flask import Flask
+from app.controllers.tweet_controller import tweet_blueprint
 
-app = FastAPI()
+app = Flask(__name__)
 
-app.include_router(tweet_router, prefix="/tweets", tags=["Tweets"])
+app.register_blueprint(tweet_blueprint, url_prefix="/tweets")
+
+if __name__ == "__main__":
+    app.run(debug=True)
