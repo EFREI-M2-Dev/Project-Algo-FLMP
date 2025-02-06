@@ -15,7 +15,7 @@ Le projet est configuré pour fonctionner directement avec Docker, il n'est pas 
 Depuis le répertoire du projet, exécute la commande suivante pour démarrer tous les services Docker (Flask, MySQL, et phpMyAdmin) :
 
 ```sh
-docker-compose up --build -d
+docker compose up --build -d
 ```
 
 Cela va :
@@ -53,7 +53,13 @@ phpMyAdmin est également disponible pour gérer la base de données MySQL via u
 Pour arrêter les services Docker, exécute la commande suivante :
 
 ```sh
-docker-compose down
+docker compose down -v
 ```
 
 Cela arrêtera et supprimera les conteneurs, les réseaux et les volumes associés.
+
+Pour garder les volumes intactes, préferez la commande suivante:
+
+```sh
+docker compose down
+```
