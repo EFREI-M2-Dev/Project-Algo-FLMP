@@ -1,9 +1,8 @@
-import random
+from app.services.predict_service import analyze_text
 
 def analyze_tweets(tweets: list[str]) -> dict:
     response = {}
     for tweet in tweets:
-        # Mocking the score
-        score = random.randint(-1, 1)
+        score = analyze_text(tweet)
         response[tweet] = score
     return response
