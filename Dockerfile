@@ -17,4 +17,5 @@ COPY . /app
 RUN pip install -r requirements.txt
 
 # Commande pour démarrer l'application
-CMD ["python", "-m", "app.main"]
+CMD ["sh", "-c", "python -m app.services.train_service && python -m app.main"]
+
