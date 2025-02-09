@@ -63,3 +63,11 @@ Pour garder les volumes intactes, préferez la commande suivante:
 ```sh
 docker compose down
 ```
+
+## Tester l'API
+
+```sh
+curl -X POST http://localhost:5001/tweets/ \
+     -H "Content-Type: application/json" \
+     -d '{"tweets":["Quel contenu inspirant ce livre", "Ecoute et ferme-la !"]}'
+```

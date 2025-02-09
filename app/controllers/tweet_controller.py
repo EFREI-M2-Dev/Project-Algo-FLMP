@@ -1,5 +1,4 @@
 from flask import Blueprint, request, jsonify
-from app.models.tweet_model import TweetsRequest
 from app.services.tweet_service import analyze_tweets
 from app.config.db import mysql
 
@@ -10,21 +9,21 @@ def post_tweets():
     try:
         data = request.get_json()
 
-        if not data:
-            raise ValueError("Aucune donnée reçue dans la requête")
+        if not isinstance(data, dict):
+            raise ValueError("Le format de la requête est invalide. Un objet JSON est attendu.")
 
-        tweets_request = TweetsRequest(**data)
+        tweets = data.get("tweets")
 
-        if not tweets_request.tweets:
-            raise ValueError("La liste des tweets est vide")
+        if not isinstance(tweets, list) or not tweets:
+            raise ValueError("La clé 'tweets' doit contenir une liste non vide.")
 
-        if not all(isinstance(tweet, str) for tweet in tweets_request.tweets):
-            raise ValueError("Tous les éléments dans la liste des tweets doivent être des chaînes de caractères")
+        if not all(isinstance(tweet, str) and tweet.strip() for tweet in tweets):
+            raise ValueError("Tous les éléments de la liste 'tweets' doivent être des chaînes de caractères non vides.")
 
-        result = analyze_tweets(tweets_request.tweets)
+        result = analyze_tweets(tweets)
 
         cursor = mysql.connection.cursor()
-        for tweet in tweets_request.tweets:
+        for tweet in tweets:
             score = result.get(tweet, 0)
             positive = 1 if score > 0 else 0
             negative = 1 if score < 0 else 0
@@ -63,4 +62,4 @@ def get_tweets():
 
         return jsonify(tweets_json), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
+        return jsonify({"error": f"Erreur interne : {str(e)}"}), 500
