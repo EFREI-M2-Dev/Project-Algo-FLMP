@@ -18,6 +18,7 @@ def load_models():
         load_models.model_pos = joblib.load(MODEL_POS_PATH)
         load_models.vectorizer = joblib.load(VECTORIZER_PATH)
 
+
 def analyze_text(text):
     load_models()  
     
