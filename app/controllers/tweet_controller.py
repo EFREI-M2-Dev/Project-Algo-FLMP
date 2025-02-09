@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.services.tweet_service import analyze_tweets
+from app.services.metrics_service import calculate_metrics 
 from app.config.db import mysql
 
 tweet_blueprint = Blueprint("tweets", __name__)
@@ -62,4 +63,22 @@ def get_tweets():
 
         return jsonify(tweets_json), 200
     except Exception as e:
+<<<<<<< HEAD
         return jsonify({"error": f"Erreur interne : {str(e)}"}), 500
+=======
+        return jsonify({"error": str(e)}), 400
+    
+
+@tweet_blueprint.route("/metrics", methods=["GET"])
+def get_metrics():
+    try:
+        y_true = ['positif', 'négatif', 'positif', 'négatif', 'positif', 'positif', 'négatif']
+        y_pred = ['positif', 'négatif', 'négatif', 'négatif', 'positif', 'positif', 'positif']
+
+        metrics = calculate_metrics(y_true, y_pred)
+
+        return jsonify(metrics), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+>>>>>>> 8ec9992 (feat(metrics): add one service and get)
