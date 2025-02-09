@@ -63,9 +63,6 @@ def get_tweets():
 
         return jsonify(tweets_json), 200
     except Exception as e:
-<<<<<<< HEAD
-        return jsonify({"error": f"Erreur interne : {str(e)}"}), 500
-=======
         return jsonify({"error": str(e)}), 400
     
 
@@ -81,4 +78,3 @@ def get_metrics():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 400
->>>>>>> 8ec9992 (feat(metrics): add one service and get)
