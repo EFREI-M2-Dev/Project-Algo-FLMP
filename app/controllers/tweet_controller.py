@@ -9,12 +9,23 @@ tweet_blueprint = Blueprint("tweets", __name__)
 def post_tweets():
     try:
         data = request.get_json()
+
+        if not data:
+            raise ValueError("Aucune donnée reçue dans la requête")
+
         tweets_request = TweetsRequest(**data)
+
+        if not tweets_request.tweets:
+            raise ValueError("La liste des tweets est vide")
+
+        if not all(isinstance(tweet, str) for tweet in tweets_request.tweets):
+            raise ValueError("Tous les éléments dans la liste des tweets doivent être des chaînes de caractères")
+
         result = analyze_tweets(tweets_request.tweets)
 
         cursor = mysql.connection.cursor()
         for tweet in tweets_request.tweets:
-            score = result[tweet]
+            score = result.get(tweet, 0)
             positive = 1 if score > 0 else 0
             negative = 1 if score < 0 else 0
             cursor.execute(
@@ -25,8 +36,11 @@ def post_tweets():
         cursor.close()
 
         return jsonify(result), 200
+
+    except ValueError as ve:
+        return jsonify({"error": str(ve)}), 400 
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
+        return jsonify({"error": f"Erreur interne : {str(e)}"}), 500 
     
 @tweet_blueprint.route("/", methods=["GET"])
 def get_tweets():
