@@ -9,23 +9,8 @@ from app.utils.text_util import clean_text
 save_dir = "models"
 os.makedirs(save_dir, exist_ok=True)
 
-data = {
-    "text": [
-        "Je te déteste, tu es horrible !",  # Négatif
-        "J'aime beaucoup cette vidéo, merci.",  # Positif
-        "Va te faire voir, imbécile.",  # Négatif
-        "Quel contenu inspirant, bravo à l'équipe !",  # Positif
-        "Tu es vraiment nul et inutile.",  # Négatif
-        "Je suis impressionné par la qualité de cette vidéo.",  # Positif
-        "Ferme-la, personne ne veut entendre ça.",  # Négatif
-        "C'est une discussion constructive, merci pour vos efforts.",  # Positif
-        "Ce commentaire est complètement stupide et inutile.",  # Négatif
-        "Merci pour cette vidéo, elle m'a beaucoup aidé !",  # Positif
-    ],
-    "label": [1, 0, 1, 0, 1, 0, 1, 0, 1, 0],  # 1 = Négatif, 0 = Positif
-}
-
-df = pd.DataFrame(data)
+csv_file = "app/assets/tweets_data.csv"
+df = pd.read_csv(csv_file)
 
 df['text_clean'] = df['text'].apply(clean_text)
 
