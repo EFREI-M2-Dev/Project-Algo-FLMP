@@ -1,0 +1,1 @@
+* * * * * root python -m app.services.init_service && python -m app.services.train_service && python -m app.main >> /var/log/train.log 2>&1
