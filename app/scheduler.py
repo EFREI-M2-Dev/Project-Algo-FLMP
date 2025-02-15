@@ -1,12 +1,11 @@
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
-from app.services import init_service, train_service, main
-import time
+from app.services import init_service
+import subprocess
 
 def job():
     print("Updating the dataset...")
-    init_service.import_data()
-    train_service.train_model()
+    subprocess.run(["python", "-m", "app.services.train_service"], check=True)
 
 def start_scheduler():
     scheduler = BackgroundScheduler()
