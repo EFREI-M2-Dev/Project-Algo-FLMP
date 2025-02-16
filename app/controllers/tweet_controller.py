@@ -52,3 +52,34 @@ def get_metrics():
 
     except Exception as e:
         return jsonify({"error": f"Erreur interne : {str(e)}"}), 500
+
+
+@tweet_blueprint.route("/reinforcement", methods=["POST"])
+def reinforcement_api():
+    from app.services.reinforcement import push_new_datas
+    try:
+        data = request.get_json()
+        if not data or "tweets" not in data:
+            raise ValueError("Le JSON doit contenir une clé 'tweets'.")
+
+        tweets = data["tweets"]
+
+        if not isinstance(tweets, list):
+            raise ValueError("'tweets' doit être une liste.")
+
+        for tweet in tweets:
+            if not isinstance(tweet, dict) or "text" not in tweet or "label" not in tweet:
+                raise ValueError("Chaque tweet doit être un dictionnaire avec 'text' et 'label'.")
+
+            if not isinstance(tweet["text"], str) or not isinstance(tweet["label"], int):
+                raise ValueError("'text' doit être une chaîne et 'label' un entier.")
+
+            if tweet["label"] not in [0, 1]:
+                raise ValueError("Le label doit être 0 (positif) ou 1 (négatif).")
+
+        push_new_datas(tweets)
+
+        return jsonify({"message": "Données ajoutées."}), 200
+
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400

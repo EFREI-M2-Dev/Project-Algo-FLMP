@@ -1,5 +1,4 @@
 import csv
-from app import create_app
 from app.config.db import mysql
 
 def read_csv(file_path: str) -> list[tuple[str, int]]:
@@ -14,6 +13,7 @@ def read_csv(file_path: str) -> list[tuple[str, int]]:
     return data
 
 def import_data():
+    from app import create_app
     app = create_app()
     with app.app_context():
         csv_file = "app/assets/tweets_data.csv"
