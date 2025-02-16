@@ -112,7 +112,7 @@ curl -X POST http://localhost:5001/tweets/reinforcement \
                 {"text": "Trop brouillon, on ne comprend rien.", "label": 1},
                 {"text": "Un post très inspirant, bravo pour le travail !", "label": 0},
                 {"text": "Rien de nouveau, du déjà-vu sans intérêt.", "label": 1},
-                {"text": "Excellente ressource, merci pour ces explications claires.", "label": 0},
+                {"text": "Excellente ressource, merci pour ces explications claires.", "label": 0}
             ]
         }'
 
