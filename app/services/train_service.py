@@ -7,26 +7,35 @@ from sklearn.feature_extraction.text import CountVectorizer
 from app.utils.text_util import clean_text
 
 save_dir = "models"
-os.makedirs(save_dir, exist_ok=True)
 
-csv_file = "app/assets/tweets_data.csv"
-df = pd.read_csv(csv_file)
 
-df['text_clean'] = df['text'].apply(clean_text)
+def train_service():
+    os.makedirs(save_dir, exist_ok=True)
 
-vectorizer = CountVectorizer(max_features=100)
-X = vectorizer.fit_transform(df['text_clean'])
-y = df['label']
+    csv_file = "app/assets/tweets_data.csv"
+    df = pd.read_csv(csv_file)
+    df['text_clean'] = df['text'].apply(clean_text)
+    
+    create_model(df['text_clean'], df['label'])
 
-X_train_neg, X_test_neg, y_train_neg, y_test_neg = train_test_split(X, y, test_size=0.25, random_state=42)
-X_train_pos, X_test_pos, y_train_pos, y_test_pos = train_test_split(X, 1 - y, test_size=0.25, random_state=42)
+def create_model(text, label):
+    vectorizer = CountVectorizer(max_features=100)
+    X = vectorizer.fit_transform(text)
+    y = label
 
-model_neg = LogisticRegression()
-model_neg.fit(X_train_neg, y_train_neg)
+    X_train_neg, X_test_neg, y_train_neg, y_test_neg = train_test_split(X, y, test_size=0.25, random_state=42)
+    X_train_pos, X_test_pos, y_train_pos, y_test_pos = train_test_split(X, 1 - y, test_size=0.25, random_state=42)
 
-model_pos = LogisticRegression()
-model_pos.fit(X_train_pos, y_train_pos)
+    model_neg = LogisticRegression()
+    model_neg.fit(X_train_neg, y_train_neg)
 
-joblib.dump(model_neg, os.path.join(save_dir, "model_negatif.pkl"))
-joblib.dump(model_pos, os.path.join(save_dir, "model_positif.pkl"))
-joblib.dump(vectorizer, os.path.join(save_dir, "vectorizer.pkl"))
+    model_pos = LogisticRegression()
+    model_pos.fit(X_train_pos, y_train_pos)
+
+    joblib.dump(model_neg, os.path.join(save_dir, "model_negatif.pkl"))
+    joblib.dump(model_pos, os.path.join(save_dir, "model_positif.pkl"))
+    joblib.dump(vectorizer, os.path.join(save_dir, "vectorizer.pkl"))
+
+
+if __name__ == "__main__":
+    train_service()
