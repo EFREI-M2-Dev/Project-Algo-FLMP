@@ -92,9 +92,35 @@ curl -X POST http://localhost:5001/tweets/ \
 }
 ```
 
+## 2. Envoyer des tweets déjà labelisé pour réentrainer le model (`POST /tweets/reinforcement`)
+
+### **Description**
+
+Cet endpoint permet de renvoyer des tweets déjà labelisés négatif ou positif et de relancer manuellement un entrainement
+
+### **Requête**
+
+```sh
+curl -X POST http://localhost:5001/tweets/reinforcement \
+     -H "Content-Type: application/json" \
+     -d '{
+            "tweets": [
+                {"text": "Ce contenu est vraiment top, merci pour le partage !", "label": 0},
+                {"text": "Une énorme perte de temps, totalement inutile.", "label": 1},
+                {"text": "Encore un article rempli d’erreurs, c’est navrant.", "label": 1},
+                {"text": "Très enrichissant, je vais le recommander à mes collègues.", "label": 0},
+                {"text": "Trop brouillon, on ne comprend rien.", "label": 1},
+                {"text": "Un post très inspirant, bravo pour le travail !", "label": 0},
+                {"text": "Rien de nouveau, du déjà-vu sans intérêt.", "label": 1},
+                {"text": "Excellente ressource, merci pour ces explications claires.", "label": 0},
+            ]
+        }'
+
+```
+
 ---
 
-## 2. Récupérer les tweets analysés (`GET /tweets/`)
+## 3. Récupérer les tweets analysés (`GET /tweets/`)
 
 ### **Description**
 
