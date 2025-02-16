@@ -8,6 +8,24 @@ from app.utils.text_util import clean_text
 from app.config.db import mysql
 from app import create_app
 
+SAVE_DIR = "models"
+
+def push_new_datas(tweets):
+    cursor = mysql.connection.cursor()
+
+    for tweet in tweets:
+        text, label = tweet["text"], tweet["label"]
+        positive = 1 if label == 0 else 0
+        negative = 1 if label == 1 else 0
+        cursor.execute(
+            "INSERT INTO tweets (text, positive, negative) VALUES (%s, %s, %s)",
+            (text, positive, negative)
+        )
+
+    mysql.connection.commit()
+    cursor.close()
+    train()
+
 def fetch_data_from_db():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT text, positive, negative FROM tweets")
@@ -17,8 +35,7 @@ def fetch_data_from_db():
 
   
 def train():
-    save_dir = "models"
-    os.makedirs(save_dir, exist_ok=True)
+    os.makedirs(SAVE_DIR, exist_ok=True)
 
     data = fetch_data_from_db()
     df = pd.DataFrame(data, columns=['text', 'positive', 'negative'])
@@ -43,9 +60,9 @@ def create_model(text, label):
     model_pos = LogisticRegression()
     model_pos.fit(X_train_pos, y_train_pos)
 
-    joblib.dump(model_neg, os.path.join(save_dir, "model_negatif.pkl"))
-    joblib.dump(model_pos, os.path.join(save_dir, "model_positif.pkl"))
-    joblib.dump(vectorizer, os.path.join(save_dir, "vectorizer.pkl"))
+    joblib.dump(model_neg, os.path.join(SAVE_DIR, "model_negatif.pkl"))
+    joblib.dump(model_pos, os.path.join(SAVE_DIR, "model_positif.pkl"))
+    joblib.dump(vectorizer, os.path.join(SAVE_DIR, "vectorizer.pkl"))
 
 
 def main():

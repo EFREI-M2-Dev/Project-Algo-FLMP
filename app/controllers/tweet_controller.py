@@ -55,8 +55,8 @@ def get_metrics():
 
 
 @tweet_blueprint.route("/reinforcement", methods=["POST"])
-def reinforcement_api():
-    from app.services.reinforcement import push_new_datas
+def reinforcement():
+    from app.services.train_service import push_new_datas
     try:
         data = request.get_json()
         if not data or "tweets" not in data:

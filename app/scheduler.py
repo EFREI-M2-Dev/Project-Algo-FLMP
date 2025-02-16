@@ -3,7 +3,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import subprocess
 
 def job():
-    subprocess.run(["python", "-m", "app.services.reinforcement"], check=True)
+    subprocess.run(["python", "-m", "app.services.train_service"], check=True)
 
 def start_scheduler():
     scheduler = BackgroundScheduler()
